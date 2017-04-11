@@ -1,3 +1,5 @@
+// only for client's id
+const yeast = require('yeast');
 const path = require('path');
 const express = require('express');
 const http = require('http');
@@ -22,9 +24,26 @@ console.log('INIT SOCKETS');
 const sock = new ws.Server({server});
 
 sock.on('connection', socket => {
-	socket.on('message', (data) => {
-		socket.send('me?');
+	socket.YeastID = yeast();
+
+	socket.on('message', (d) => {
+		const data = JSON.parse(d);
+
+		if (data.action === 'message') {
+			sock.clients.forEach(client => {
+				if (client.YeastID !== socket.YeastID) {
+					client.send(d);
+				}
+			})
+
+			tsMessage(data.data.message);
+		}
 	})
 });
 
 server.listen(port);
+
+const tsMessage = (m) => {
+	const date = new Date().toTimeString();
+	console.log(`${date}: ${m}`);
+}

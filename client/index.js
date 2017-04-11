@@ -1,8 +1,9 @@
 const createMessage = (message) => {
 	const mess = document.createElement('div');
+	const date = new Date().toTimeString();
 
 	mess.classList.add('message');
-	mess.textContent = message;
+	mess.textContent = `${date}: ${message}`;
 
 	return mess;
 }
@@ -19,16 +20,39 @@ const createSocket = () => {
 	return socket;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-	showMessage('hey baby, wanna fuck?');
+const initSocket = (socket) => {
+	const sendForm = document.getElementById('send-form');
 
-	const socket = createSocket();
+	sendForm.addEventListener('submit', (event) => {
+		const message = document.getElementById('message-text').value;
+
+		if (message) {
+			console.log(message);
+			socket.send(JSON.stringify({
+				action: 'message',
+				data: {message},
+			}));
+			showMessage(message);
+		};
+		event.preventDefault();
+	});
 
 	socket.onopen = (event) => {
-		socket.send(JSON.stringify({action: 'fuck'}));
+		console.info('Opened connection');
 	};
 
 	socket.onmessage = (event) => {
-		showMessage(event.data);
+		console.info('Recieved message', event.data);
+		const data = JSON.parse(event.data);
+
+		if (data.action === 'message') {
+			const date = new Date().toTimeString();
+
+			showMessage(data.data.message);
+		}
 	}
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+	initSocket(createSocket());
 });
