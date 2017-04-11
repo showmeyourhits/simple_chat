@@ -1,21 +1,30 @@
 const path = require('path');
 const express = require('express');
 const http = require('http');
-const socket = require('socket.io');
+const ws = require('ws');
 
 const [port] = process.argv.slice(2);
 
-console.log('STARTING APP RIGHT NOW');
+console.log('\nSTARTING APP RIGHT NOW');
 const app = express();
+const server = http.Server(app);
 app.use(express.static('./client', {
 	dotfiles: 'allow',
-}))
-
-const appSocket = socket(http.Server(app));
+}));
 
 app.get('/', (req, res) => {
 	console.log('recieved request');
 	res.sendFile(path.resolve(__dirname + '/index.html'));
 });
 
-app.listen(port);
+console.log('INIT SOCKETS');
+
+const sock = new ws.Server({server});
+
+sock.on('connection', socket => {
+	socket.on('message', (data) => {
+		socket.send('me?');
+	})
+});
+
+server.listen(port);
