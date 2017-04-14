@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:server": "node server/server.js 23456",
-    "server:dev": "supervisor -w server,client -- server/server.js 23456"
+    "server:dev": "supervisor -w server,client -- server/server.js 23456",
+    "server:production": "NODE_ENV=production node server/server.js 23456"
   },
   "keywords": [],
   "author": "",

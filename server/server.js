@@ -6,6 +6,7 @@ const http = require('http');
 const ws = require('ws');
 
 const [port] = process.argv.slice(2);
+console.log(process.env.NODE_ENV);
 
 console.log('\nSTARTING APP RIGHT NOW');
 const app = express();
