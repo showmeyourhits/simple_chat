@@ -30,14 +30,22 @@ sock.on('connection', socket => {
 	socket.on('message', (d) => {
 		const data = JSON.parse(d);
 
-		if (data.action === 'message') {
-			sock.clients.forEach(client => {
-				if (client.YeastID !== socket.YeastID) {
-					client.send(d);
-				}
-			})
+		switch (data.action) {
+			case 'message':
+				sock.clients.forEach(client => {
+					if (client.YeastID !== socket.YeastID) {
+						client.send(d);
+					}
+				});
 
-			tsMessage(data.data.message);
+				tsMessage(data.data.message);
+				break;
+			case 'ping':
+				socket.send(JSON.stringify({action:'pong'}));
+
+				break;
+			default:
+				return false;
 		}
 	})
 });

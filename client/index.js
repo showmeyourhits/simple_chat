@@ -39,6 +39,10 @@ const initSocket = (socket) => {
 
 	socket.onopen = (event) => {
 		console.info('Opened connection');
+
+		setInterval(() => {
+			socket.send(JSON.stringify({action:'ping'}));
+		}, 30000);
 	};
 
 	socket.onmessage = (event) => {
