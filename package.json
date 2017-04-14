@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server:dev": "supervisor -w server,client -- server/server.js 23456",
-    "server:production": "NODE_ENV=production node server/server.js 23456"
+    "server:dev": "supervisor -w server,client -- server/server.js",
+    "server": "NODE_ENV=production PORT=23457 node server/server.js",
+    "server:heroku": "NODE_ENV=production node server/server.js"
   },
   "keywords": [],
   "author": "",

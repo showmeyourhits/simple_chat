@@ -1,14 +1,14 @@
-// only for client's id
 const yeast = require('yeast');
 const path = require('path');
 const express = require('express');
 const http = require('http');
 const ws = require('ws');
 
-const [port] = process.argv.slice(2);
-console.log(process.env.NODE_ENV);
+const port = process.env.PORT || 23456;
 
-console.log('\nSTARTING APP RIGHT NOW');
+console.log(process.argv);
+console.log(`STARTING APP ON PORT ${port}`);
+
 const app = express();
 const server = http.Server(app);
 app.use(express.static('./client', {
