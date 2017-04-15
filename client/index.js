@@ -25,6 +25,7 @@ const initSocket = (socket) => {
 
 	sendForm.addEventListener('submit', (event) => {
 		const message = document.getElementById('message-text').value;
+		document.getElementById('message-text').value = '';
 
 		if (message) {
 			console.log(message);
